@@ -6,7 +6,7 @@ form.addEventListener('submit', function(event){
 
     validateName()
     validateCar()
-    // validateDate()
+    validateDate()
     validateDays()
     validateCc()
     validateCvv()
@@ -38,51 +38,54 @@ function validateName(){
     }
 }
 function validateCar(){
-    let carYear = document.querySelector('#car-year')
-    let carYearValue = carYear.value
-    let carMake = document.querySelector('#car-make')
-    let carMakeValue = carMake.value
-    let carModel = document.querySelector('#car-model')
-    let carModelValue = carModel.value
-    let carField = document.querySelector('#car-field')
+    let yearInput = document.querySelector('#car-year')
+    let yearInfo = yearInput.value
+    let parentEl = document.querySelector('#car-field')
+    let makeInput = document.querySelector('#car-make')
+    let makeInfo = makeInput.value
+    let modelInfo = document.querySelector('#car-field')
 
     document.getElementsByTagName("label")[1].setAttribute("id","car-year")
-    let nameLabel = document.querySelector("#car-year")
+    let carLabel = document.querySelector("#car-year")
+
+    y = document.getElementById("car-year").value
     
     // let parentEl = car.parentElement
 
-    if (carYearValue && carMakeValue && carModelValue){
-        console.log("car input is valid")
-        carField.classList.remove("input-invalid")
-        nameLabel.textContent = "Car year"
-        carField.classList.add("input-valid")
-    } else {
-        console.log("car is invalid")
-        carField.classList.remove("input-valid")
-        nameLabel.textContent = "Car year is needed"
-        carField.classList.add("input-invalid")
+    if (isNaN(y) || y < 1900 || y > 2020 || makeInfo === "" || modelInfo === ""){
+        console.log("car input is invalid")
+        parentEl.classList.remove("input-valid")
+        carLabel.textContent = "Car year"
+        parentEl.classList.add("input-valid")
         formIsValid = false
+    } else if (yearInfo !== "" && makeInfo !== "" && modelInfo !== ""){
+        console.log("car is invalid")
+        parentEl.classList.remove("input-valid")
+        carLabel.textContent = "Car year is needed"
+        parentEl.classList.add("input-invalid")
     }
 }
 
 
 function validateDate(){
-    let dateInput = document.querySelector('#start-date-parking')
-    let dateValue = dateInput.value
+    let dateInput = document.querySelector('#start-date')
+    let dateInfo = dateInput.value
     let parentEl = dateInput.parentElement
+    let currentDate = new Date();
+    dateInfo = new Date (dateInfo);
 
-    document.getElementsByTagName("label")[2].setAttribute("id","start-date-parking")
-    let nameLabel = document.querySelector("#start-date-parking")
+    document.getElementsByTagName("label")[2].setAttribute("id","date-label")
+    let dateLabel = document.querySelector("#date-label")
 
-    if (dateValue){
+    if (dateInfo > currentDate){
         console.log("date input is valid")
         parentEl.classList.remove("input-invalid")
-        nameLabel.textContent = "start-date"
+        dateLabel.textContent = "Date parking"
         parentEl.classList.add("input-valid")
     } else {
         console.log("date is invalid")
         parentEl.classList.remove("input-valid")
-        nameLabel.textContent = "Start date is needed"
+        dateLabel.textContent = "Start date is needed"
         parentEl.classList.add("input-invalid")
         formIsValid = false
     }
