@@ -98,7 +98,7 @@ function validateDays(){
     document.getElementsByTagName("label")[3].setAttribute("id","days")
     let nameLabel = document.querySelector("#days")
 
-    if (daysValue){
+    if (daysValue > 0 && daysValue < 31){
         console.log("Day input is valid")
         parentEl.classList.remove("input-invalid")
         nameLabel.textContent = "Days"
@@ -106,21 +106,13 @@ function validateDays(){
     } else {
         console.log("Day is invalid")
         parentEl.classList.remove("input-valid")
-        nameLabel.textContent = "Number of days you need to park is required"
+        nameLabel.textContent = "Number of days must be more than 1 and less than 30"
         parentEl.classList.add("input-invalid")
         formIsValid = false
     }
 }
 
-
-
-function validateCc(){
-    let CcInput = document.querySelector('#credit-card')
-    let CcValue = CcInput.value
-    let parentEl = CcInput.parentElement
-
-    // STEP 5 --Credit Card Validation
-function validateCardNumber(number) {
+function validateCc(number) {
     var regex = new RegExp("^[0-9]{16}$");
     if (!regex.test(number))
         return false;
@@ -143,24 +135,6 @@ function luhnCheck(val) {
     return (sum % 10) == 0;
 }
 
-
-    document.getElementsByTagName("label")[4].setAttribute("id","credit-card")
-    let nameLabel = document.querySelector("#credit-card")
-
-    if (CcValue){
-        console.log("Credit Card input is valid")
-        parentEl.classList.remove("input-invalid")
-        nameLabel.textContent = "Credit Card Information"
-        parentEl.classList.add("input-valid")
-    } else {
-        console.log("Credit Card is invalid")
-        parentEl.classList.remove("input-valid")
-        nameLabel.textContent = "Credit Card information is required"
-        parentEl.classList.add("input-invalid")
-        formIsValid = false
-    }
-}
-
 function validateCvv(){
     let cvvInput = document.querySelector('#cvv')
     let cvvValue = cvvInput.value
@@ -169,7 +143,7 @@ function validateCvv(){
     document.getElementsByTagName("label")[5].setAttribute("id","cvv")
     let nameLabel = document.querySelector("#cvv")
 
-    if (cvvValue){
+    if (cvvValue.length === 3){
         console.log("cvv input is valid")
         parentEl.classList.remove("input-invalid")
         nameLabel.textContent = "CVV Information"
@@ -188,10 +162,14 @@ function validateExp(){
     let expValue = expInput.value
     let parentEl = expInput.parentElement
 
+    let today = new Date()
+    let todayMonth = today.getMonth() +1
+    let todayYear = today.getFullYear() % 100
+
     document.getElementsByTagName("label")[5].setAttribute("id","expiration")
     let nameLabel = document.querySelector("#expiration")
 
-    if (expValue){
+    if (expValue >= todayYear && monthValidate >= todayMonth){
         console.log("exp. input is valid")
         parentEl.classList.remove("input-invalid")
         nameLabel.textContent = "Expiration Information"
@@ -205,45 +183,49 @@ function validateExp(){
     }
 }
 
+function totalCost(){
+    if (
+        nameInput.classList.contains("input-valid") === true &&
+        carInput.classList.contains("input-valid") === true &&
+        startDateInput.classList.contains("input-valid") === true &&
+        daysInput.classList.contains("input-valid") === true &&
+        ccInput.classList.contains("input-valid") === true &&
+        cvvInput.classList.contains("input-valid") === true &&
+        expInput.classList.contains("input-valid") === true
+     ) { 
+        let edate = new Date(document.querySelector("#start-date").valueAsNumber)
+        let dow = edate.getDay()
+        let price = 0
+        for (let n = 0; n < document.querySelector("#days").value; n++){
+            if (dow == 5 || dow == 6) price += 7
+            else price += 5
+            dow++
+            if (dow > 6) dow = 0
+        }
+        document.querySelector("#total").textContent = "Total: $" + price + ".00"
+}       else {document.querySelector("#total").textContent = ""}
+}
 
+// function validateCc(){
+//     let CcInput = document.querySelector('#credit-card')
+//     let CcValue = CcInput.value
+//     let parentEl = CcInput.parentElement
 
+//     document.getElementsByTagName("label")[4].setAttribute("id","credit-card")
+//     let nameLabel = document.querySelector("#credit-card")
 
-//     if(nameBox) {
-//         //do something if valid
-//         console.log("Name is valid")
+//     if (CcValue){
+//         console.log("Credit Card input is valid")
+//         parentEl.classList.remove("input-invalid")
+//         nameLabel.textContent = "Credit Card Information"
+//         parentEl.classList.add("input-valid")
 //     } else {
-//         //do something if invalid
-//         console.log("name is invalid")
-//     }
-
-
-//     }
-// )
-
-
-
-
-
-
-
-
-
-//     removeErrorMessage()
-//     formisValid = true
-
-//     inputField()
-// })
-
-// function inputField(){
-//     let inputField = document.querySelector('#name-field')
-//     let inputField = inputField.nodeValue
-//     let parentEl = inputField.parentElement
-
-//     if (emailAddress){
-//         console.log('form is valid')
-//         parentEl.classList.remove('input-invalid')
-//         parentEl.classList.add('input-invalid')
+//         console.log("Credit Card is invalid")
+//         parentEl.classList.remove("input-valid")
+//         nameLabel.textContent = "Credit Card information is required"
+//         parentEl.classList.add("input-invalid")
 //         formIsValid = false
 //     }
 // }
+
 
